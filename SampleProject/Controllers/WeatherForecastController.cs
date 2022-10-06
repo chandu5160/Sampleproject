@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,8 +25,12 @@ namespace SampleProject.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> Get(string username)
         {
+            SqlConnection connection = new SqlConnection();
+            var sql = "SELECT * FROM UserAccount WHERE Username = '" + username +"'";
+            SqlCommand command = new SqlCommand(sql, connection);
+            SqlDataReader reader = command.ExecuteReader();
             //this is test
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
